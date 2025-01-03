@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Pasek wyszukiwania -->
+        <div id="searchBar" class="search-bar">
+            <form id="searchFormTop">
+                <input type="text" id="titleTop" name="title" placeholder="Tytuł filmu">
+                <input type="text" id="genreTop" name="genre" placeholder="Gatunek">
+                <input type="text" id="directorTop" name="director" placeholder="Reżyser">
+                <input type="text" id="actorTop" name="actor" placeholder="Aktor">
+                <button type="submit">Wyszukaj</button>
+                <button type="button" id="resetFilters">Resetuj Filtry</button>
+            </form>
+        </div>
+
+        <!-- Tło informacji o wybranych filtrach-->
+        <div id="filterInfo" style="display:none;">
+            <div class="filter-background">
+                <p id="selectedFilters">Wybrane filtry: </p>
+            </div>
+        </div>
+
+        <!-- Wyniki wyszukiwania -->
+        <div id="results">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Tytuł</th>
+                        <th>Gatunek</th>
+                        <th>Reżyser</th>
+                        <th>Aktorzy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Wyniki będą wyświetlane tutaj -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

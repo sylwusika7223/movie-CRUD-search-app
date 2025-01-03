@@ -1,0 +1,224 @@
+/* Podstawowe style strony */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Container formularza (pełny formularz) */
+#searchFormContainer {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 50px auto;
+}
+
+/* Formularz (pełny formularz) */
+#searchForm {
+    width: 100%;
+}
+
+/* Grupa formularza (pełny formularz) */
+#searchForm .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+/* Etykiety formularza */
+#searchForm label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+/* Pola formularza - tekstowe (rozciągnięte na prawie całą szerokość formularza) */
+#searchForm input {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    width: 100%; /* Rozciągnięcie na całą szerokość */
+    max-width: calc(100% - 24px); /* Mniejszy margines po bokach */
+    margin-bottom: 10px; /* Odstęp między polami */
+}
+
+/* Przycisk formularza */
+#searchForm button {
+    background-color: #28a745;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    margin-top: 20px;
+}
+
+#searchForm button:hover {
+    background-color: #218838;
+}
+
+/* Pasek wyszukiwania (po wyszukaniu) */
+.search-bar {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;  /* Mały margines nad paskiem */
+    margin-left: 30px; /* Wcięcie po lewej stronie */
+    margin-right: 30px; /* Wcięcie po prawej stronie */
+    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
+    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+}
+
+/* Formularz w pasku wyszukiwania */
+.search-bar form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.search-bar input,
+.search-bar button {
+    margin: 5px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+.search-bar button:hover {
+    background-color: #218838;
+}
+
+/* Ukrywanie formularza wyszukiwania po wyszukaniu */
+#searchFormContainer.hidden {
+    display: none;
+}
+
+/* Tło informacji o wybranych filtrach (przeniesione nad tabelę) */
+#filterInfo {
+    margin-bottom: 20px; /* Przestrzeń przed tabelą */
+    text-align: center;
+}
+
+.filter-background {
+    background-color: #f2f2f2;
+    padding: 15px;
+    border-radius: 8px;
+    width: calc(100% - 60px); /* Tło o tej samej szerokości co pasek wyszukiwania i tabela */
+    margin-left: 30px; /* Wcięcie po lewej stronie */
+    margin-right: 30px; /* Wcięcie po prawej stronie */
+    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+}
+
+#selectedFilters {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Tabela wyników */
+table {
+    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
+    border-collapse: collapse;
+    margin-top: 30px;
+    margin-left: 30px; /* Wcięcie po lewej stronie */
+    margin-right: 30px; /* Wcięcie po prawej stronie */
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    font-size: 16px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Komunikat o braku wyników */
+#results p {
+    font-size: 18px;
+    color: #ff0000;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 8px;
+    text-align: center;
+    margin-left: 30px; /* Wcięcie po lewej stronie */
+    margin-right: 30px; /* Wcięcie po prawej stronie */
+    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
+    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+}
+
+/* Powiadomienie wyników */
+#results-header {
+    background-color: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-left: 30px; /* Wcięcie po lewej stronie */
+    margin-right: 30px; /* Wcięcie po prawej stronie */
+    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
+    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+}
+
+/* Responsywność formularza */
+@media (max-width: 768px) {
+    #searchFormContainer .form-group,
+    #searchFormContainerTop .form-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #searchFormContainer label,
+    #searchFormContainerTop label {
+        padding-right: 0;
+    }
+
+    #searchFormContainer input,
+    #searchFormContainerTop input,
+    #searchFormContainer button,
+    #searchFormContainerTop button {
+        flex: 1;
+        margin-bottom: 10px;
+    }
+}

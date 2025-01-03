@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Film</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Przyciski powrotu i nagłówek -->
+        <a href="/movies" class="back-button">&#8592; Wszystkie Filmy</a>
+        <h1>Dodaj Nowy Film</h1>
+
+        <!-- Formularz dodawania filmu -->
+        <form id="addMovieForm">
+            <input type="text" id="title" name="title" placeholder="Tytuł filmu" required>
+            <input type="text" id="genre" name="genre" placeholder="Gatunek" required>
+            <input type="text" id="year" name="year" placeholder="Rok produkcji" required>
+            <input type="text" id="actors" name="actors" placeholder="Aktorzy (rozdzieleni przecinkami)" required>
+            <input type="text" id="director" name="director" placeholder="Reżyser" required>
+            <button type="submit">Dodaj Film</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
