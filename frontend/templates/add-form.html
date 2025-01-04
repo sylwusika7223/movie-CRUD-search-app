@@ -9,17 +9,27 @@
 <body>
     <div class="container">
         <!-- Przyciski powrotu i nagłówek -->
-        <a href="/movies" class="back-button">&#8592; Wszystkie Filmy</a>
-        <h1>Dodaj Nowy Film</h1>
+        <a href="/" class="back-button">&#8592; Wszystkie Filmy</a> <!-- Stylizowany przycisk powrotu -->
+        <h1>Dodaj Nowy Film</h1> <!-- Tytuł formularza wyrównany do lewej -->
 
         <!-- Formularz dodawania filmu -->
-        <form id="addMovieForm">
-            <input type="text" id="title" name="title" placeholder="Tytuł filmu" required>
-            <input type="text" id="genre" name="genre" placeholder="Gatunek" required>
-            <input type="text" id="year" name="year" placeholder="Rok produkcji" required>
-            <input type="text" id="actors" name="actors" placeholder="Aktorzy (rozdzieleni przecinkami)" required>
-            <input type="text" id="director" name="director" placeholder="Reżyser" required>
-            <button type="submit">Dodaj Film</button>
+        <form id="addMovieForm" method="POST" action="{{ url_for('add_movie') }}">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        
+            <label for="genre">Genre:</label>
+            <input type="text" id="genre" name="genre" required>
+        
+            <label for="year">Year:</label>
+            <input type="number" id="year" name="year" required>
+        
+            <label for="actors">Actors (comma separated):</label>
+            <input type="text" id="actors" name="actors" required>
+        
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" required>
+        
+            <button type="submit" id="btn-submitt">Add Movie</button>
         </form>
     </div>
 

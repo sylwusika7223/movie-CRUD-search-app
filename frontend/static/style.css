@@ -3,7 +3,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #f9f9f9b1;
     color: #333;
 }
 
@@ -200,6 +200,168 @@ tr:hover {
     width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
     box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
 }
+
+/* Kontener formularza */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0 20px; /* Spore marginesy */
+  }
+  
+  /* Formularz */
+  .form {
+    background-color: #f0f0f5; /* Jasny kolor tła */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  /* Etykiety */
+  .form label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    display: block;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  /* Pola tekstowe */
+  .form input[type="text"],
+  .form input[type="number"],
+  .form input[type="date"],
+  .form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    color: #333;
+    background-color: #fff;
+  }
+  
+  .form input[type="submit"] {
+    background-color: #3498db; /* Kolor przycisku Apple */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .form input[type="submit"]:hover {
+    background-color: #2980b9; /* Zmiana koloru przycisku */
+  }
+  
+  .add-movie-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    float: right; /* Przesuwa przycisk na prawą stronę */
+}
+
+.add-movie-button:hover {
+    background-color: #2980b9;
+}
+
+  
+/* Styl dla formularza */
+#addMovieForm {
+    width: 55%; /* Maksymalna szerokość formularza to 55% szerokości ekranu */
+    min-width: 300px; /* Minimalna szerokość formularza */
+    margin: 30px auto; /* Wyśrodkowanie formularza */
+    padding: 20px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+/* Styl dla tytułu formularza */
+.container h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    margin-left: 22%; 
+    padding-left: 15px; /* Wyrównanie tytułu do lewej strony formularza */
+}
+
+/* Styl dla etykiet */
+#addMovieForm label {
+    display: block;
+    margin-bottom: 10px;
+    margin-left: 30px auto; 
+    font-size: 16px;
+    color: #333;
+}
+
+/* Styl dla pól tekstowych */
+#addMovieForm input[type="text"],
+#addMovieForm input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Styl dla przycisku submit */
+#btn-submitt {
+    width: 100%;
+    padding: 10px;
+    background-color: #49b04c;
+    color: #ffffff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+/* Styl dla przycisku submit w momencie najechania */
+#addMovieForm input[type="submit"]:hover {
+    background-color: #60bb64;
+}
+
+/* Styl dla przycisku powrotu */
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 3%; /* Margines z góry */
+    margin-left: 3%; /* Margines z lewej strony */
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
+
+
+
+
 
 /* Responsywność formularza */
 @media (max-width: 768px) {

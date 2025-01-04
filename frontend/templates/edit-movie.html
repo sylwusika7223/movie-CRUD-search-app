@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Film</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="/index" class="back-button">&#8592; Wszystkie Filmy</a>
+        <h1>Edytuj Film</h1>
+
+        <!-- Formularz edytowania filmu -->
+        <form id="editMovieForm">
+            <input type="text" id="title" name="title" value="{{ movie.title }}" required>
+            <input type="text" id="genre" name="genre" value="{{ movie.genre }}" required>
+            <input type="text" id="year" name="year" value="{{ movie.year }}" required>
+            <input type="text" id="actors" name="actors" value="{{ movie.actors | join(', ') }}" required>
+            <input type="text" id="director" name="director" value="{{ movie.director }}" required>
+            <button type="submit">Zapisz Zmiany</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterInfo = document.getElementById('filterInfo');
     const selectedFilters = document.getElementById('selectedFilters');
     const resultsTableBody = document.querySelector('#resultsTable tbody');
-
     const searchFormTop = document.getElementById('searchFormTop');
     const resetFiltersButton = document.getElementById('resetFilters'); // Przyciski resetu
 
@@ -101,4 +100,59 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => console.error('Błąd:', error));
     }
+
+    // Obsługa formularza dodawania filmu
+    document.getElementById('addMovieForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Zapobiega standardowemu przesyłaniu formularza
+    
+        const title = document.getElementById('title').value;
+        const genre = document.getElementById('genre').value;
+        const year = document.getElementById('year').value;
+        const actors = document.getElementById('actors').value;
+        const director = document.getElementById('director').value;
+    
+        // Debugging: Sprawdź dane przed wysłaniem
+        console.log(`Form data: Title=${title}, Genre=${genre}, Year=${year}, Actors=${actors}, Director=${director}`);
+    
+        // Tworzymy dane do wysłania w żądaniu POST
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("genre", genre);
+        formData.append("year", year);
+        formData.append("actors", actors);
+        formData.append("director", director);
+    
+        // Wyślij dane do serwera
+        fetch('/add', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); // Informacja o sukcesie
+    
+            // Po dodaniu, przeładuj wyniki wyszukiwania (w tym przypadku bez filtrów)
+            fetchResults();
+        })
+        .catch(error => console.error('Błąd:', error));
+    }); 
 });
+
+// Obsługa usuwania filmu
+document.getElementById("deleteButton").addEventListener("click", function() {
+    const movieId = this.dataset.movieId; // Pobierz movieId z atrybutu
+    if (confirm("Czy na pewno chcesz usunąć film?")) {
+        fetch('/delete/' + movieId, { method: 'DELETE' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = "/index"; // Przekierowanie na stronę główną
+                }
+            });
+    }
+});
+
+document.getElementById("editButton").addEventListener("click", function() {
+    const movieId = this.dataset.movieId; // Pobierz movieId z atrybutu
+    window.location.href = "/edit/" + movieId; // Przekierowanie do strony edycji
+});
+

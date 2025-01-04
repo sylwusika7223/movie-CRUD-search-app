@@ -19,14 +19,19 @@
                 <button type="button" id="resetFilters">Resetuj Filtry</button>
             </form>
         </div>
-
+    
+        <!-- Przycisk dodawania nowego filmu -->
+        <div id="addMovieButtonContainer">
+            <a href="/add" class="add-movie-button">+</a>
+        </div>
+    
         <!-- Tło informacji o wybranych filtrach-->
         <div id="filterInfo" style="display:none;">
             <div class="filter-background">
                 <p id="selectedFilters">Wybrane filtry: </p>
             </div>
         </div>
-
+    
         <!-- Wyniki wyszukiwania -->
         <div id="results">
             <table id="resultsTable">
@@ -43,7 +48,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div>    
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

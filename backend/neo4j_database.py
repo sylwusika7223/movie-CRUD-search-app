@@ -9,3 +9,4 @@ def get_neo4j_session():
 
 def close_neo4j_session(session):
     session.close()
+

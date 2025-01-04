@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły Filmu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <a href="/index" class="back-button">&#8592; Wszystkie Filmy</a>
+        <h1>{{ movie.title }}</h1>
+        <p><strong>Gatunek:</strong> {{ movie.genre }}</p>
+        <p><strong>Rok produkcji:</strong> {{ movie.year }}</p>
+        <p><strong>Aktorzy:</strong> {{ movie.actors | join(', ') }}</p>
+        <p><strong>Reżyser:</strong> {{ movie.director }}</p>
+        
+        <button id="editButton">Edytuj</button>
+        <button id="deleteButton" class="delete-button">Usuń</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
