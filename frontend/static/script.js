@@ -21,50 +21,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function handleSearch() {
-        const title = document.getElementById('titleTop').value;
-        const genre = document.getElementById('genreTop').value;
-        const actor = document.getElementById('actorTop').value;
-        const director = document.getElementById('directorTop').value;
+    const title = document.getElementById('titleTop').value.trim();
+    const genre = document.getElementById('genreTop').value.trim();
+    const actor = document.getElementById('actorTop').value.trim();
+    const director = document.getElementById('directorTop').value.trim();
 
-        console.log(`Submitting search with parameters: Title=${title}, Genre=${genre}, Actor=${actor}, Director=${director}`);
+    console.log(`Submitting search with parameters: Title=${title}, Genre=${genre}, Actor=${actor}, Director=${director}`);
 
-        const url = `/search?title=${encodeURIComponent(title)}&genre=${encodeURIComponent(genre)}&actor=${encodeURIComponent(actor)}&director=${encodeURIComponent(director)}`;
+    const url = `/search?title=${encodeURIComponent(title)}&genre=${encodeURIComponent(genre)}&actor=${encodeURIComponent(actor)}&director=${encodeURIComponent(director)}`;
+    
+    fetch(url)
+     .then(response => response.json())
+     .then(data => {
+         resultsTableBody.innerHTML = ''; 
+         filterInfo.style.display = data.query_params.length > 0 ? 'block' : 'none';
+         selectedFilters.textContent = `Wybrane filtry: ${data.query_params.join(', ')}`;
+
+         if (data.results.length > 0) {
+             data.results.forEach(movie => {
+                 const row = document.createElement('tr');
+                 row.innerHTML = `
+                     <td>${movie.title || "Brak danych"}</td>
+                     <td>${movie.genre || "Brak danych"}</td>
+                     <td>${movie.director || "Brak danych"}</td>
+                     <td>${movie.actors && movie.actors.length > 0 ? movie.actors.join(', ') : "Brak danych"}</td>
+                 `;
+                 resultsTableBody.appendChild(row);
+             });
+         } else {
+             const row = document.createElement('tr');
+             row.innerHTML = '<td colspan="4">Brak wyników dla podanych filtrów.</td>';
+             resultsTableBody.appendChild(row);
+         }
+     })
+     .catch(error => console.error('Błąd:', error));
+}
+
         
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                // Jeśli nie ma wyników, ukryj informację o filtrach
-                if (data.results.length === 0) {
-                    filterInfo.style.display = 'none';
-                } else {
-                    filterInfo.style.display = 'block'; // Jeśli są wyniki, pokaż informację o filtrach
-                    if (data.query_params && Array.isArray(data.query_params)) {
-                        selectedFilters.textContent = `Wyniki dla: ${data.query_params.join(', ')}`;
-                    } else {
-                        selectedFilters.textContent = "Brak filtrów.";
-                    }
-                }
-
-                resultsTableBody.innerHTML = ''; // Wyczyść tabelę przed dodaniem nowych wyników
-                if (data.results.length > 0) {
-                    data.results.forEach(movie => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${movie.title}</td>
-                            <td>${movie.genre}</td>
-                            <td>${movie.director}</td>
-                            <td>${movie.actors.join(', ')}</td>
-                        `;
-                        resultsTableBody.appendChild(row);
-                    });
-                } else {
-                    const row = document.createElement('tr');
-                    row.innerHTML = '<td colspan="4">Brak wyników dla podanych filtrów.</td>';
-                    resultsTableBody.appendChild(row);
-                }
-            })
-            .catch(error => console.error('Błąd:', error));
-    }
 
     function resetSearchForm() {
         document.getElementById('titleTop').value = '';
@@ -75,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Funkcja do pobierania wyników bez filtrów
     function fetchResults() {
-        const url = '/search';  // Bez parametrów, żeby pobrać wszystkie wyniki
+        const url = '/search'; // Bez parametrów, żeby pobrać wszystkie wyniki
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -85,10 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     data.results.forEach(movie => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${movie.title}</td>
-                            <td>${movie.genre}</td>
-                            <td>${movie.director}</td>
-                            <td>${movie.actors.join(', ')}</td>
+                            <td>${movie.title || "Brak danych"}</td>
+                            <td>${movie.genre || "Brak danych"}</td>
+                            <td>${movie.director || "Brak danych"}</td>
+                            <td>${movie.actors && movie.actors.length > 0 ? movie.actors.join(', ') : "Brak danych"}</td>
                         `;
                         resultsTableBody.appendChild(row);
                     });
@@ -99,8 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => console.error('Błąd:', error));
-    }
-
+    }    
+    
     // Obsługa formularza dodawania filmu
     document.getElementById('addMovieForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Zapobiega standardowemu przesyłaniu formularza

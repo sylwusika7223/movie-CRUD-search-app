@@ -44,7 +44,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Wyniki będą wyświetlane tutaj -->
+                    {% for movie in results %}
+                    <tr>
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.genre }}</td>
+                        <td>{{ movie.director }}</td>
+                        <td>{{ movie.actors | join(', ') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4">Brak wyników.</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -20,69 +20,95 @@ def search():
     actor = request.args.get("actor", "").strip()
     director = request.args.get("director", "").strip()
 
-    # Debugging
+    # Debugging: Print the parameters received in the search
     print(f"Received search parameters: Title={title}, Genre={genre}, Actor={actor}, Director={director}")
 
     # Wywołanie zapytania do Neo4j
-    results, query_params = search_movies(title, genre, actor, director)
+    results = search_movies(title, genre, actor, director)
 
-    # Jeśli są wyniki, zwróć je razem z parametrami wyszukiwania
-    if results:
-        return jsonify({
-            "results": results,
-            "query_params": query_params
-        })
-    else:
-        return jsonify({
-            "results": [],
-            "message": "Brak wyników dla podanych filtrów."
-        })
+    # Debugging: Print the results before sending them to frontend
+    print(f"Results from Neo4j: {results}")
+
+    query_params = []
+    if title:
+        query_params.append(f"Tytuł: {title}")
+    if genre:
+        query_params.append(f"Gatunek: {genre}")
+    if actor:
+        query_params.append(f"Aktor: {actor}")
+    if director:
+        query_params.append(f"Reżyser: {director}")
+
+    # Debugging: Check if results are empty or not
+    if not results:
+        print("No results found for the given filters")
+
+    print(f"Results before filtering: {results}")
+    results = filter_movies(results)
+    print(f"Results after filtering: {results}")
+
+    print(f"Sending data to frontend: {results}")
+    return jsonify({
+        "results": results,
+        "query_params": query_params
+    })
 
 
+# Wywołanie zapytania do Neo4j
 def search_movies(title=None, genre=None, actor=None, director=None):
     query = """
-    MATCH (f:Movie)-[:ACTED_IN]->(a:Actor), (f)-[:DIRECTED_BY]->(d:Director)
-    WHERE 1 = 1
+    MATCH (m:Movie)
+    OPTIONAL MATCH (m)<-[:ACTED_IN]-(a:Actor)
+    OPTIONAL MATCH (m)-[:DIRECTED_BY]->(d:Director)
+    OPTIONAL MATCH (m)-[:IN_GENRE]->(g:Genre)
+    WHERE
+        ($title IS NULL OR toLower(m.title) CONTAINS toLower($title)) AND
+        ($genre IS NULL OR toLower(g.name) CONTAINS toLower($genre)) AND
+        ($actor IS NULL OR toLower(a.name) CONTAINS toLower($actor)) AND
+        ($director IS NULL OR toLower(d.name) CONTAINS toLower($director))
+    RETURN 
+        m.title AS title, 
+        coalesce(g.name, 'Brak danych') AS genre, 
+        coalesce(m.year, 'Brak danych') AS year, 
+        coalesce(d.name, 'Brak danych') AS director, 
+        collect(DISTINCT a.name) AS actors
+    ORDER BY title
     """
-    
-    parameters = {}
-    query_params = []
 
-    # Dodajemy warunki do zapytania, jeśli zostały podane przez użytkownika
-    if title:
-        query += " AND f.title CONTAINS $title"
-        parameters["title"] = title
-        query_params.append(f'Tytuł: {title}')
-    
-    if genre:
-        query += " AND f.genre CONTAINS $genre"
-        parameters["genre"] = genre
-        query_params.append(f'Gatunek: {genre}')
-    
-    if actor:
-        query += " AND a.name CONTAINS $actor"
-        parameters["actor"] = actor
-        query_params.append(f'Aktor: {actor}')
-    
-    if director:
-        query += " AND d.name CONTAINS $director"
-        parameters["director"] = director
-        query_params.append(f'Reżyser: {director}')
-    
-    query += " RETURN f.title AS title, f.genre AS genre, d.name AS director, collect(DISTINCT a.name) AS actors"
-    
+    parameters = {
+        "title": title if title else None,
+        "genre": genre if genre else None,
+        "actor": actor if actor else None,
+        "director": director if director else None,
+    }
+
+    # Debugging: Check the parameters being passed
+    print(f"Running query with parameters: {parameters}")
+
     session = get_neo4j_session()
     result = session.run(query, parameters)
 
-    # Przetwarzamy wynik zapytania
-    movies = [{"title": record["title"], "genre": record["genre"], 
-               "director": record["director"], "actors": record["actors"]} for record in result]
-    
-    # Zamknięcie sesji
-    session.close()
-    
-    return movies, query_params
+    # Debugging: Check the raw results from Neo4j
+    results = [record for record in result]
+    print(f"Raw Neo4j results: {results}")
 
+    # Przetwarzanie wyników
+    movies = []
+    for record in results:
+        print(f"Processing record: {record}")  # Debugging: Print each record
+        movies.append({
+            "title": record["title"],
+            "genre": record["genre"],
+            "year": record["year"],
+            "director": record["director"],
+            "actors": record["actors"] if record["actors"] else ["Brak danych"],
+        })
+
+    session.close()
+    return movies
+
+def filter_movies(movies):
+    return [movie for movie in movies if movie["genre"] != "Brak danych" and movie["director"] != "Brak danych"]
 
 @app.route("/add", methods=["GET", "POST"])
 def add_movie():

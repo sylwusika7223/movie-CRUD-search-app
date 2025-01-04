@@ -1,40 +1,79 @@
 from neo4j_database import get_neo4j_session
 
+from neo4j_database import get_neo4j_session
+
 def add_movie_service(title, genre, year, actors, director):
     session = get_neo4j_session()
 
-    # Tworzymy lub łączymy węzeł filmu
-    movie_query = """
-    MERGE (m:Movie {title: $title, genre: $genre, year: $year})
-    """
-    session.run(movie_query, {"title": title, "genre": genre, "year": year})
+    try:
+        # Przetwarzanie danych wejściowych
+        title = title.strip()
+        genre = genre.strip()
+        year = str(year).strip()
+        director = director.strip()
+        actors = [actor.strip() for actor in actors]
 
-    # Sprawdzamy i łączymy aktorów
-    for actor_name in actors:
-        actor_query = """
-        MERGE (a:Actor {name: $actor_name})
-        MERGE (a)-[:ACTED_IN]->(m)
-        """
-        session.run(actor_query, {"actor_name": actor_name})
+        print(f"Adding movie: {title}, Genre: {genre}, Year: {year}")
+        print(f"Actors: {actors}, Director: {director}")
 
-    # Sprawdzamy i łączymy reżysera
-    director_query = """
-    MERGE (d:Director {name: $director})
-    MERGE (d)-[:DIRECTED_BY]->(m)
-    """
-    session.run(director_query, {"director": director})
+        # Sprawdzamy, czy film już istnieje
+        if movie_exists(title, year, director):
+            print(f"Movie '{title}' already exists. Skipping creation.")
+            return  # Przerwij, jeśli film już istnieje
 
-    # Dodajemy gatunek (jeśli jest wymagane)
-    genre_query = """
-    MERGE (g:Genre {name: $genre})
-    MERGE (g)-[:IN_GENRE]->(m)
-    """
-    session.run(genre_query, {"genre": genre})
+        # Rozpocznij transakcję
+        with session.begin_transaction() as tx:
 
-    session.close()
-    return {'success': True}
+            # Sprawdzenie, czy parametry są obecne
+            if not genre or not year:
+                print(f"Brakuje wymaganych parametrów: Gatunek={genre}, Rok={year}")
+                return jsonify({"error": "Brak gatunku lub roku!"}), 400
+
+            # Tworzenie węzła filmu z odpowiednimi parametrami
+            movie_query = """
+            MERGE (m:Movie {title: $title})
+            SET m.genre = $genre, m.year = $year
+            """
+            tx.run(movie_query, {"title": title, "genre": genre, "year": year})
+
+            # Tworzenie reżysera i relacji
+            director_query = """
+            MERGE (m:Movie {title: $title})
+            ON CREATE SET m.genre = $genre, m.year = $year
+            MERGE (d:Director {name: $director})
+            MERGE (m)-[:DIRECTED_BY]->(d)
+            """
+            tx.run(director_query, {"director": director, "title": title, "genre": genre, "year": year})
 
 
+            # Tworzenie gatunku i relacji IN_GENRE
+            genre_query = """
+            MERGE (g:Genre {name: $genre})
+            WITH g
+            MATCH (m:Movie {title: $title})
+            MERGE (m)-[:IN_GENRE]->(g)
+            """
+            tx.run(genre_query, {"genre": genre, "title": title})
+
+            # Tworzenie aktorów i relacji ACTED_IN
+            for actor_name in actors:
+                actor_query = """
+                MERGE (a:Actor {name: $actor_name})
+                WITH a
+                MATCH (m:Movie {title: $title})
+                MERGE (a)-[:ACTED_IN]->(m)
+                """
+                tx.run(actor_query, {"actor_name": actor_name, "title": title})
+
+            # Zatwierdzenie transakcji
+            tx.commit()
+
+        print(f"Successfully created movie '{title}' and its relationships.")
+
+    except Exception as e:
+        print(f"Error while adding movie: {e}")
+    finally:
+        session.close()
 
 
 def edit_movie_service(movie_id, title, genre, year, actors, director):
@@ -105,19 +144,22 @@ def get_movie_by_id(movie_id):
     return None
 
 
-def movie_exists(title, director):
+def movie_exists(title, year=None, director=None):
     query = """
-    MATCH (m:Movie)-[:DIRECTED_BY]->(d:Director)
-    WHERE m.title = $title AND d.name = $director
+    MATCH (m:Movie)
+    WHERE m.title = $title
+      AND ($year IS NULL OR m.year = $year)
+      AND ($director IS NULL OR (m)-[:DIRECTED_BY]->(:Director {name: $director}))
     RETURN m
     """
     session = get_neo4j_session()
-    result = session.run(query, {"title": title, "director": director})
+    parameters = {"title": title, "year": year, "director": director}
+    result = session.run(query, parameters)
 
-    # Upewnij się, że nie próbujesz wielokrotnie przetwarzać wyniku
-    movie = result.single()  # Tu sprawdzamy pierwszy wynik
+    movie = result.single()  # Sprawdź pierwszy wynik
     session.close()
 
     return movie is not None
+
 
 
