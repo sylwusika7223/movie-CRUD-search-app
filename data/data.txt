@@ -4,8 +4,9 @@ Instrukcje ładowania pliku
  3. Wykonaj polecenie.
       cypher-shell -u neo4j -p <twoje_hasło> -f load_movies.cql
 
-
-
+// Ustawienia unikalności
+CREATE CONSTRAINT FOR (m:Movie) REQUIRE m.title IS UNIQUE;
+CREATE CONSTRAINT ON (a:Actor) ASSERT a.name IS UNIQUE;
 
 // Dodajmy reżyserów
 MERGE (d1:Director {name: "Christopher Nolan"})

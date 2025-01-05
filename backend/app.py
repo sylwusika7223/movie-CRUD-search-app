@@ -127,7 +127,7 @@ def add_movie():
     return render_template("add-form.html")
 
 
-@app.route("/movie/<string:movie_title>")
+@app.route("/movie/<string:movie_title>", methods=["GET"])
 def movie_details(movie_title):
     movie = get_movie_by_title(movie_title)
     if movie:
@@ -138,15 +138,24 @@ def movie_details(movie_title):
 # Route do edytowania filmu
 @app.route("/edit/<string:movie_title>", methods=["GET", "POST"])
 def edit_movie(movie_title):
-    movie = get_movie_by_title(movie_title)  # Get the movie details from DB
+    movie = get_movie_by_title(movie_title)  # Pobierz szczegóły filmu z bazy danych
+    print(movie)  # Debugowanie - sprawdź, jakie dane są w obiekcie 'movie'
+    
     if request.method == "POST":
         title = request.form["title"]
         genre = request.form["genre"]
         year = request.form["year"]
-        actors = request.form["actors"].split(",")
+        actors = [actor.strip() for actor in request.form["actors"].split(",")]  # Rozdzielanie aktorów po przecinku
         director = request.form["director"]
+        
+        # Zaktualizowanie danych filmu w bazie
         edit_movie_service(movie_title, title, genre, year, actors, director)
-        return redirect(url_for('movie_details', movie_id=movie_title))
+        
+        # Po zapisaniu zmian, ładujemy zaktualizowane szczegóły filmu
+        updated_movie = get_movie_by_title(title)  # Aby pobrać najnowsze dane po edycji
+        return render_template("movie-details.html", movie=updated_movie)
+    
+    # Jeśli metoda GET, przekaż dane do formularza
     return render_template("edit-movie.html", movie=movie)
 
 # Route do usuwania filmu
@@ -157,6 +166,20 @@ def delete_movie(movie_title):
     delete_movie_service(movie_title)
     return jsonify({"message": "Film został usunięty pomyślnie!"}), 200
 
+@app.route('/get_movie_data/<movie_title>', methods=['GET'])
+def get_movie_data(movie_title):
+    movie = get_movie_by_title(movie_title)
+    
+    if movie is None:
+        return jsonify({"error": "Film not found"}), 404
+    
+    return jsonify({
+        'title': movie['title'],
+        'genre': movie['genre'],
+        'year': movie['year'],
+        'actors': movie['actors'],
+        'director': movie['director']
+    })
 
 
 if __name__ == '__main__':

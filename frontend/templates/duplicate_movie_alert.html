@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duplikat filmu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>Film o tytule "{{ title }}" już istnieje!</h2>
-    <p>Czy chcesz dodać coś innego?</p>
-    <button onclick="window.location.href='/add';">Dodaj inny film</button>
-    <button onclick="window.location.href='/';">Anuluj i wróć do strony głównej</button>
+    <div class="container">
+        <h1>Duplikat filmu</h1>
+        <p>Film o tytule "<strong>{{ title }}</strong>" już istnieje!</p>
+        <p>Czy chcesz dodać coś innego?</p>
+
+        <div class="button-group">
+            <button onclick="window.location.href='/add';">Dodaj inny film</button>
+            <button onclick="window.location.href='/';">Anuluj i wróć do strony głównej</button>
+        </div>
+    </div>
 </body>
 </html>
