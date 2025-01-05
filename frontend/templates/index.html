@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Search</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
@@ -15,23 +15,25 @@
                 <input type="text" id="genreTop" name="genre" placeholder="Gatunek">
                 <input type="text" id="directorTop" name="director" placeholder="Reżyser">
                 <input type="text" id="actorTop" name="actor" placeholder="Aktor">
-                <button type="submit">Wyszukaj</button>
-                <button type="button" id="resetFilters">Resetuj Filtry</button>
+                <div class="button-container">
+                    <button type="submit">Wyszukaj</button>
+                    <button type="button" id="resetFilters">Resetuj Filtry</button>
+                </div>
             </form>
         </div>
-    
+
         <!-- Przycisk dodawania nowego filmu -->
-        <div id="addMovieButtonContainer">
-            <a href="/add" class="add-movie-button">+</a>
+        <div id="addMovieButtonContainer" class="add-movie-container">
+            <a href="/add" class="add-movie-button">+ Dodaj Film</a>
         </div>
-    
+
         <!-- Tło informacji o wybranych filtrach-->
         <div id="filterInfo" style="display:none;">
             <div class="filter-background">
                 <p id="selectedFilters">Wybrane filtry: </p>
             </div>
         </div>
-    
+
         <!-- Wyniki wyszukiwania -->
         <div id="results">
             <table id="resultsTable">
@@ -41,26 +43,18 @@
                         <th>Gatunek</th>
                         <th>Reżyser</th>
                         <th>Aktorzy</th>
+                        <th>Akcje</th> <!-- Nowa kolumna na przyciski -->
                     </tr>
                 </thead>
                 <tbody>
-                    {% for movie in results %}
                     <tr>
-                        <td>{{ movie.title }}</td>
-                        <td>{{ movie.genre }}</td>
-                        <td>{{ movie.director }}</td>
-                        <td>{{ movie.actors | join(', ') }}</td>
+                        <td colspan="5">Brak wyników.</td>
                     </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="4">Brak wyników.</td>
-                    </tr>
-                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>    
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>

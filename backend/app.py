@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie_service import add_movie_service, edit_movie_service, delete_movie_service, get_movie_by_id, movie_exists
+from movie_service import add_movie_service, edit_movie_service, delete_movie_service, get_movie_by_title, movie_exists
 from neo4j_database import get_neo4j_session
 
 # Konfiguracja ścieżek do szablonów i plików statycznych
@@ -20,14 +20,8 @@ def search():
     actor = request.args.get("actor", "").strip()
     director = request.args.get("director", "").strip()
 
-    # Debugging: Print the parameters received in the search
-    print(f"Received search parameters: Title={title}, Genre={genre}, Actor={actor}, Director={director}")
-
     # Wywołanie zapytania do Neo4j
     results = search_movies(title, genre, actor, director)
-
-    # Debugging: Print the results before sending them to frontend
-    print(f"Results from Neo4j: {results}")
 
     query_params = []
     if title:
@@ -43,11 +37,8 @@ def search():
     if not results:
         print("No results found for the given filters")
 
-    print(f"Results before filtering: {results}")
     results = filter_movies(results)
-    print(f"Results after filtering: {results}")
 
-    print(f"Sending data to frontend: {results}")
     return jsonify({
         "results": results,
         "query_params": query_params
@@ -82,20 +73,15 @@ def search_movies(title=None, genre=None, actor=None, director=None):
         "director": director if director else None,
     }
 
-    # Debugging: Check the parameters being passed
-    print(f"Running query with parameters: {parameters}")
-
     session = get_neo4j_session()
     result = session.run(query, parameters)
 
     # Debugging: Check the raw results from Neo4j
     results = [record for record in result]
-    print(f"Raw Neo4j results: {results}")
 
     # Przetwarzanie wyników
     movies = []
     for record in results:
-        print(f"Processing record: {record}")  # Debugging: Print each record
         movies.append({
             "title": record["title"],
             "genre": record["genre"],
@@ -141,30 +127,36 @@ def add_movie():
     return render_template("add-form.html")
 
 
-@app.route("/movie/<int:movie_id>")
-def movie_details(movie_id):
-    movie = get_movie_by_id(movie_id)
-    return render_template("movie-details.html", movie=movie)
+@app.route("/movie/<string:movie_title>")
+def movie_details(movie_title):
+    movie = get_movie_by_title(movie_title)
+    if movie:
+        return render_template("movie-details.html", movie=movie)
+    else:
+        return "Film nie znaleziony", 404
 
 # Route do edytowania filmu
-@app.route("/edit/<int:movie_id>", methods=["GET", "POST"])
-def edit_movie(movie_id):
-    movie = get_movie_by_id(movie_id)  # Get the movie details from DB
+@app.route("/edit/<string:movie_title>", methods=["GET", "POST"])
+def edit_movie(movie_title):
+    movie = get_movie_by_title(movie_title)  # Get the movie details from DB
     if request.method == "POST":
         title = request.form["title"]
         genre = request.form["genre"]
         year = request.form["year"]
         actors = request.form["actors"].split(",")
         director = request.form["director"]
-        edit_movie_service(movie_id, title, genre, year, actors, director)
-        return redirect(url_for('movie_details', movie_id=movie_id))
+        edit_movie_service(movie_title, title, genre, year, actors, director)
+        return redirect(url_for('movie_details', movie_id=movie_title))
     return render_template("edit-movie.html", movie=movie)
 
 # Route do usuwania filmu
-@app.route("/delete/<int:movie_id>", methods=["POST"])
-def delete_movie(movie_id):
-    delete_movie_service(movie_id)
-    return redirect(url_for('index'))
+@app.route("/delete/<string:movie_title>", methods=["DELETE"])
+def delete_movie(movie_title):
+    print(f"Attempting to delete movie with title: {movie_title}")
+    # Usunięcie filmu z bazy
+    delete_movie_service(movie_title)
+    return jsonify({"message": "Film został usunięty pomyślnie!"}), 200
+
 
 
 if __name__ == '__main__':

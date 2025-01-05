@@ -1,3 +1,4 @@
+from flask import jsonify
 from neo4j_database import get_neo4j_session
 
 from neo4j_database import get_neo4j_session
@@ -112,24 +113,36 @@ def edit_movie_service(movie_id, title, genre, year, actors, director):
     session.close()
     return {'success': True}
 
-def delete_movie_service(movie_id):
+def delete_movie_service(movie_title):
     session = get_neo4j_session()
+    
+    # Usuwanie relacji przed usunięciem węzła
     query = """
-    MATCH (m:Movie) WHERE ID(m) = $movie_id
+    MATCH (m:Movie {title: $movie_title})-[r]-()
+    DELETE r
+    """
+    session.run(query, {"movie_title": movie_title})
+    
+    # Teraz usunięcie samego filmu
+    query = """
+    MATCH (m:Movie) WHERE m.title = $movie_title
     DELETE m
     """
-    session.run(query, {"movie_id": movie_id})
+    session.run(query, {"movie_title": movie_title})
     session.close()
-    return {'success': True}
+    
+    return {'success': True, 'message': f"Film '{movie_title}' został usunięty."}
 
-def get_movie_by_id(movie_id):
+
+
+def get_movie_by_title(movie_title):
     session = get_neo4j_session()
     query = """
     MATCH (m:Movie)-[:ACTED_IN]->(a:Actor), (m)-[:DIRECTED_BY]->(d:Director)
-    WHERE ID(m) = $movie_id
+    WHERE toLower(m.title) = toLower($movie_title)
     RETURN m.title AS title, m.genre AS genre, m.year AS year, d.name AS director, collect(a.name) AS actors
     """
-    result = session.run(query, {"movie_id": movie_id})
+    result = session.run(query, {"movie_title": movie_title})
     movie = result.single()
     session.close()
 

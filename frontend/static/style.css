@@ -48,9 +48,9 @@ body {
     border: 1px solid #ccc;
     border-radius: 8px;
     outline: none;
-    width: 100%; /* Rozciągnięcie na całą szerokość */
-    max-width: calc(100% - 24px); /* Mniejszy margines po bokach */
-    margin-bottom: 10px; /* Odstęp między polami */
+    width: 100%;
+    max-width: calc(100% - 24px);
+    margin-bottom: 10px;
 }
 
 /* Przycisk formularza */
@@ -79,11 +79,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;  /* Mały margines nad paskiem */
-    margin-left: 30px; /* Wcięcie po lewej stronie */
-    margin-right: 30px; /* Wcięcie po prawej stronie */
-    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
-    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    width: calc(100% - 60px);
+    box-sizing: border-box;
 }
 
 /* Formularz w pasku wyszukiwania */
@@ -119,9 +119,9 @@ body {
     display: none;
 }
 
-/* Tło informacji o wybranych filtrach (przeniesione nad tabelę) */
+/* Tło informacji o wybranych filtrach */
 #filterInfo {
-    margin-bottom: 20px; /* Przestrzeń przed tabelą */
+    margin-bottom: 20px;
     text-align: center;
 }
 
@@ -129,10 +129,10 @@ body {
     background-color: #f2f2f2;
     padding: 15px;
     border-radius: 8px;
-    width: calc(100% - 60px); /* Tło o tej samej szerokości co pasek wyszukiwania i tabela */
-    margin-left: 30px; /* Wcięcie po lewej stronie */
-    margin-right: 30px; /* Wcięcie po prawej stronie */
-    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+    width: calc(100% - 60px);
+    margin-left: 30px;
+    margin-right: 30px;
+    box-sizing: border-box;
 }
 
 #selectedFilters {
@@ -141,16 +141,57 @@ body {
     font-weight: bold;
 }
 
+/* Przyciski w tabeli */
+.action-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Przycisk Edytuj (Niebieski) */
+.editButton {
+    background-color: #3498db; /* Niebieski */
+    color: white;
+}
+
+.editButton:hover {
+    background-color: #2980b9;
+}
+
+/* Przycisk Szczegóły (Żółty) */
+.detailsButton {
+    background-color: #f39c12; /* Żółty */
+    color: white;
+}
+
+.detailsButton:hover {
+    background-color: #e67e22;
+}
+
+/* Przycisk Usuń (Czerwony) */
+.deleteButton {
+    background-color: #e74c3c; /* Czerwony */
+    color: white;
+}
+
+.deleteButton:hover {
+    background-color: #c0392b;
+}
+
 /* Tabela wyników */
 table {
-    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
+    width: calc(100% - 60px);
     border-collapse: collapse;
     margin-top: 30px;
-    margin-left: 30px; /* Wcięcie po lewej stronie */
-    margin-right: 30px; /* Wcięcie po prawej stronie */
+    margin-left: 30px;
+    margin-right: 30px;
     border-radius: 8px;
     overflow: hidden;
-    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+    box-sizing: border-box;
 }
 
 table, th, td {
@@ -179,10 +220,10 @@ tr:hover {
     background-color: #f2f2f2;
     border-radius: 8px;
     text-align: center;
-    margin-left: 30px; /* Wcięcie po lewej stronie */
-    margin-right: 30px; /* Wcięcie po prawej stronie */
-    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
-    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+    margin-left: 30px;
+    margin-right: 30px;
+    width: calc(100% - 60px);
+    box-sizing: border-box;
 }
 
 /* Powiadomienie wyników */
@@ -195,10 +236,10 @@ tr:hover {
     font-weight: bold;
     border-radius: 8px;
     border: 1px solid #ddd;
-    margin-left: 30px; /* Wcięcie po lewej stronie */
-    margin-right: 30px; /* Wcięcie po prawej stronie */
-    width: calc(100% - 60px); /* Szerokość uwzględniająca marginesy */
-    box-sizing: border-box; /* Zapewnia, że marginesy nie wpłyną na szerokość */
+    margin-left: 30px;
+    margin-right: 30px;
+    width: calc(100% - 60px);
+    box-sizing: border-box;
 }
 
 /* Kontener formularza */
@@ -207,33 +248,33 @@ tr:hover {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    margin: 0 20px; /* Spore marginesy */
-  }
-  
-  /* Formularz */
-  .form {
-    background-color: #f0f0f5; /* Jasny kolor tła */
+    margin: 0 20px;
+}
+
+/* Formularz */
+.form {
+    background-color: #f0f0f5;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 600px;
-  }
-  
-  /* Etykiety */
-  .form label {
+}
+
+/* Etykiety */
+.form label {
     font-size: 1.2rem;
     margin-bottom: 10px;
     display: block;
     font-weight: bold;
     color: #333;
-  }
-  
-  /* Pola tekstowe */
-  .form input[type="text"],
-  .form input[type="number"],
-  .form input[type="date"],
-  .form textarea {
+}
+
+/* Pola tekstowe */
+.form input[type="text"],
+.form input[type="number"],
+.form input[type="date"],
+.form textarea {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
@@ -242,10 +283,10 @@ tr:hover {
     font-size: 1rem;
     color: #333;
     background-color: #fff;
-  }
-  
-  .form input[type="submit"] {
-    background-color: #3498db; /* Kolor przycisku Apple */
+}
+
+.form input[type="submit"] {
+    background-color: #3498db;
     color: white;
     border: none;
     padding: 15px 30px;
@@ -254,13 +295,13 @@ tr:hover {
     border-radius: 8px;
     cursor: pointer;
     width: 100%;
-  }
-  
-  .form input[type="submit"]:hover {
-    background-color: #2980b9; /* Zmiana koloru przycisku */
-  }
-  
-  .add-movie-button {
+}
+
+.form input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.add-movie-button {
     background-color: #3498db;
     color: white;
     padding: 10px 20px;
@@ -272,19 +313,33 @@ tr:hover {
     margin-right: 30px;
     margin-bottom: 20px;
     text-decoration: none;
-    float: right; /* Przesuwa przycisk na prawą stronę */
+    float: right;
 }
 
 .add-movie-button:hover {
     background-color: #2980b9;
 }
 
-  
+/* Stylizacja linków w tabeli */
+#resultsTable a {
+    color: #0000FF;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+}
+
+#resultsTable a:hover {
+    color: #1E90FF;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+}
+
 /* Styl dla formularza */
 #addMovieForm {
-    width: 55%; /* Maksymalna szerokość formularza to 55% szerokości ekranu */
-    min-width: 300px; /* Minimalna szerokość formularza */
-    margin: 30px auto; /* Wyśrodkowanie formularza */
+    width: 55%;
+    min-width: 300px;
+    margin: 30px auto;
     padding: 20px;
     background-color: #f4f4f4;
     border: 1px solid #ccc;
@@ -299,15 +354,15 @@ tr:hover {
     font-weight: bold;
     color: #333;
     margin-bottom: 15px;
-    margin-left: 22%; 
-    padding-left: 15px; /* Wyrównanie tytułu do lewej strony formularza */
+    margin-left: 22%;
+    padding-left: 15px;
 }
 
 /* Styl dla etykiet */
 #addMovieForm label {
     display: block;
     margin-bottom: 10px;
-    margin-left: 30px auto; 
+    margin-left: 30px;
     font-size: 16px;
     color: #333;
 }
@@ -351,17 +406,13 @@ tr:hover {
     font-size: 16px;
     text-decoration: none;
     border-radius: 4px;
-    margin-top: 3%; /* Margines z góry */
-    margin-left: 3%; /* Margines z lewej strony */
+    margin-top: 3%;
+    margin-left: 3%;
 }
 
 .back-button:hover {
     background-color: #2980b9;
 }
-
-
-
-
 
 /* Responsywność formularza */
 @media (max-width: 768px) {
