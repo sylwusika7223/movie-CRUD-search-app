@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedFilters = document.getElementById('selectedFilters');
     const resultsTableBody = document.querySelector('#resultsTable tbody');
     const searchFormTop = document.getElementById('searchFormTop');
-    const resetFiltersButton = document.getElementById('resetFilters'); // Przyciski resetu
+    const resetFiltersButton = document.getElementById('resetFilters'); 
 
     // Ładowanie wyników bez filtrów po załadowaniu strony
     fetchResults();
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     resetFiltersButton.addEventListener('click', function() {
         resetSearchForm();
-        fetchResults(); // Ładowanie danych bez filtrów
+        fetchResults(); 
     });
 
     function handleSearch() {
@@ -57,34 +57,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Dodanie eventów do przycisków edycji i usuwania
                   document.querySelectorAll('.editButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Redirecting to edit page with title: ${movieTitle}`);
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             window.location.href = `/edit/${encodeURIComponent(movieTitle)}`;
                         });
                     });
 
                     document.querySelectorAll('.detailsButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Redirecting to details page with title: ${movieTitle}`);
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             window.location.href = `/movie/${encodeURIComponent(movieTitle)}`;
                         });
                     });
 
                     document.querySelectorAll('.deleteButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Preparing to delete movie with title: ${movieTitle}`); // Debugging line
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             if (confirm("Czy na pewno chcesz usunąć film?")) {
                                 fetch(`/delete/${encodeURIComponent(movieTitle)}`, {
                                     method: 'DELETE',
                                     headers: {
-                                        'Content-Type': 'application/json' // Dodanie nagłówka
+                                        'Content-Type': 'application/json' 
                                     }})
                                     .then(response => {
                                         if (response.ok) {
                                             console.log("Film usunięty pomyślnie");
-                                            window.location.href = "/index"; // Przekierowanie na stronę główną
+                                            window.location.href = "/index"; 
                                         }
                                     });
                             }
@@ -111,12 +108,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Funkcja do pobierania wyników bez filtrów
     function fetchResults() {
-        const url = '/search'; // Bez parametrów, żeby pobrać wszystkie wyniki
+        const url = '/search'; 
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                filterInfo.style.display = 'none'; // Ukrywanie informacji o filtrach, gdy brak filtrów
-                resultsTableBody.innerHTML = ''; // Wyczyść tabelę przed dodaniem nowych wyników
+                filterInfo.style.display = 'none'; 
+                resultsTableBody.innerHTML = ''; 
                 if (data.results.length > 0) {
                     data.results.forEach(movie => {
                         const row = document.createElement('tr');
@@ -134,39 +131,34 @@ document.addEventListener('DOMContentLoaded', function() {
                         resultsTableBody.appendChild(row);
                     });
 
-                    // Dodanie eventów do przycisków edycji i usuwania
                   document.querySelectorAll('.editButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Redirecting to edit page with title: ${movieTitle}`);
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             window.location.href = `/edit/${encodeURIComponent(movieTitle)}`;
                         });
                     });
 
                     document.querySelectorAll('.detailsButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Redirecting to details page with title: ${movieTitle}`);
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             window.location.href = `/movie/${encodeURIComponent(movieTitle)}`;
                         });
                     });
 
                     document.querySelectorAll('.deleteButton').forEach(button => {
                         button.addEventListener('click', function() {
-                            const movieTitle = this.getAttribute('data-movie-title'); // Pobieramy tytuł filmu
-                            console.log(`Preparing to delete movie with title: ${movieTitle}`); // Debugging line
+                            const movieTitle = this.getAttribute('data-movie-title'); 
                             if (confirm("Czy na pewno chcesz usunąć film?")) {
                                 console.log(`${encodeURIComponent(movieTitle)}`);
                                 fetch(`/delete/${encodeURIComponent(movieTitle)}`, {
                                     method: 'DELETE',
                                     headers: {
-                                        'Content-Type': 'application/json' // Dodanie nagłówka
+                                        'Content-Type': 'application/json'
                                     }})
                                     .then(response => {
                                         if (response.ok) {
                                             console.log("Film usunięty pomyślnie");
-                                            // Możesz teraz odświeżyć widok lub usunąć film z listy bez przeładowania strony
-                                            location.reload(); // Lub możesz usunąć dany wiersz z tabeli bez odświeżania całej strony
+                                            location.reload(); 
                                         } else {
                                             console.error("Błąd podczas usuwania filmu");
                                         }
@@ -189,18 +181,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Obsługa formularza dodawania filmu
     document.getElementById('addMovieForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Zapobiega standardowemu przesyłaniu formularza
+        event.preventDefault(); 
     
         const title = document.getElementById('title').value;
         const genre = document.getElementById('genre').value;
         const year = document.getElementById('year').value;
         const actors = document.getElementById('actors').value;
         const director = document.getElementById('director').value;
-    
-        // Debugging: Sprawdź dane przed wysłaniem
+
         console.log(`Form data: Title=${title}, Genre=${genre}, Year=${year}, Actors=${actors}, Director=${director}`);
     
-        // Tworzymy dane do wysłania w żądaniu POST
         const formData = new FormData();
         formData.append("title", title);
         formData.append("genre", genre);
@@ -208,16 +198,12 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append("actors", actors);
         formData.append("director", director);
     
-        // Wyślij dane do serwera
         fetch('/add', {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.message); // Informacja o sukcesie
-    
-            // Po dodaniu, przeładuj wyniki wyszukiwania (w tym przypadku bez filtrów)
             fetchResults();
         })
         .catch(error => console.error('Błąd:', error));

@@ -1,5 +1,5 @@
 document.getElementById('editMovieForm').addEventListener('submit', function(event) {
-    // Pobieramy dane z formularza
+    // Pobieranie danych z formularza
     const title = document.getElementById('title').value.trim();
     const genre = document.getElementById('genre').value.trim();
     const year = document.getElementById('year').value.trim();
@@ -13,6 +13,5 @@ document.getElementById('editMovieForm').addEventListener('submit', function(eve
         return;
     }
 
-    // Jeśli wszystko jest OK, wyświetlamy komunikat debugujący
     console.log("Wysyłanie formularza z danymi:", { title, genre, year, actors, director });
 });

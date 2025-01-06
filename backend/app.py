@@ -1,18 +1,19 @@
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie_service import add_movie_service, edit_movie_service, delete_movie_service, get_movie_by_title, movie_exists
+from movie_service import add_movie_service, edit_movie_service, delete_movie_service, filter_movies, get_movie_by_title, movie_exists, search_movies
 from neo4j_database import  get_neo4j_session
 
 # Konfiguracja ścieżek do szablonów i plików statycznych
 app = Flask(__name__,
             template_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'templates'),
             static_folder=os.path.join(os.path.dirname(__file__), '..', 'frontend', 'static'))
+
 # Strona główna
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# Trasa wyszukiwania filmów
+# Filtrowanie filmów
 @app.route("/search", methods=["GET"])
 def search():
     title = request.args.get("title", "").strip()
@@ -33,68 +34,12 @@ def search():
     if director:
         query_params.append(f"Reżyser: {director}")
 
-    # Debugging: Check if results are empty or not
-    if not results:
-        print("No results found for the given filters")
-
     results = filter_movies(results)
 
     return jsonify({
         "results": results,
         "query_params": query_params
     })
-
-
-# Wywołanie zapytania do Neo4j
-def search_movies(title=None, genre=None, actor=None, director=None):
-    query = """
-    MATCH (m:Movie)
-    OPTIONAL MATCH (m)<-[:ACTED_IN]-(a:Actor)
-    OPTIONAL MATCH (m)-[:DIRECTED_BY]->(d:Director)
-    OPTIONAL MATCH (m)-[:IN_GENRE]->(g:Genre)
-    WHERE
-        ($title IS NULL OR toLower(m.title) CONTAINS toLower($title)) AND
-        ($genre IS NULL OR toLower(g.name) CONTAINS toLower($genre)) AND
-        ($actor IS NULL OR toLower(a.name) CONTAINS toLower($actor)) AND
-        ($director IS NULL OR toLower(d.name) CONTAINS toLower($director))
-    RETURN 
-        m.title AS title, 
-        coalesce(g.name, 'Brak danych') AS genre, 
-        coalesce(m.year, 'Brak danych') AS year, 
-        coalesce(d.name, 'Brak danych') AS director, 
-        collect(DISTINCT a.name) AS actors
-    ORDER BY title
-    """
-
-    parameters = {
-        "title": title if title else None,
-        "genre": genre if genre else None,
-        "actor": actor if actor else None,
-        "director": director if director else None,
-    }
-
-    session = get_neo4j_session()
-    result = session.run(query, parameters)
-
-    # Debugging: Check the raw results from Neo4j
-    results = [record for record in result]
-
-    # Przetwarzanie wyników
-    movies = []
-    for record in results:
-        movies.append({
-            "title": record["title"],
-            "genre": record["genre"],
-            "year": record["year"],
-            "director": record["director"],
-            "actors": record["actors"] if record["actors"] else ["Brak danych"],
-        })
-
-    session.close()
-    return movies
-
-def filter_movies(movies):
-    return [movie for movie in movies if movie["genre"] != "Brak danych" and movie["director"] != "Brak danych"]
 
 @app.route("/add", methods=["GET", "POST"])
 def add_movie():
@@ -111,17 +56,12 @@ def add_movie():
             print("One or more fields are missing!")
             return jsonify({"error": "Wszystkie pola muszą być wypełnione!"}), 400
 
-        # Sprawdzamy, czy film już istnieje
+        # Sprwdzanie, czy dodawany film już istnieje
         if get_movie_by_title(title) is not None:
             print(f"Rendering duplicate_movie_alert.html for movie: {title}")
             return render_template("duplicate_movie_alert.html", title=title)
 
-        # Dodanie filmu do bazy danych
         add_movie_service(title, genre, year, actors, director)
-
-        # Sprawdzanie, czy zapytanie pochodzi z AJAX
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return jsonify({"message": "Film dodany pomyślnie!"})
 
         return redirect("/")
 
@@ -136,11 +76,10 @@ def movie_details(movie_title):
     else:
         return "Film nie znaleziony", 404
 
-# Route do edytowania filmu
+# Edycja filmu
 @app.route("/edit/<string:movie_title>", methods=["GET", "POST"])
 def edit_movie(movie_title):
-    movie = get_movie_by_title(movie_title)  # Pobierz szczegóły filmu z bazy danych
-    print(movie)  # Debugowanie - sprawdź, jakie dane są w obiekcie 'movie'
+    movie = get_movie_by_title(movie_title)  # Pobieranie szczegółów dot. filmu
     
     if request.method == "POST":
         title = request.form["title"]
@@ -149,21 +88,16 @@ def edit_movie(movie_title):
         actors = [actor.strip() for actor in request.form["actors"].split(",")]  # Rozdzielanie aktorów po przecinku
         director = request.form["director"]
         
-        # Zaktualizowanie danych filmu w bazie
         edit_movie_service(movie_title, title, genre, year, actors, director)
         
-        # Po zapisaniu zmian, ładujemy zaktualizowane szczegóły filmu
-        updated_movie = get_movie_by_title(title)  # Aby pobrać najnowsze dane po edycji
+        updated_movie = get_movie_by_title(title) 
         return render_template("movie-details.html", movie=updated_movie)
     
-    # Jeśli metoda GET, przekaż dane do formularza
     return render_template("edit-movie.html", movie=movie)
 
-# Route do usuwania filmu
+# Usuwanie filmu
 @app.route("/delete/<string:movie_title>", methods=["DELETE"])
 def delete_movie(movie_title):
-    print(f"Attempting to delete movie with title: {movie_title}")
-    # Usunięcie filmu z bazy
     delete_movie_service(movie_title)
     return jsonify({"message": "Film został usunięty pomyślnie!"}), 200
 

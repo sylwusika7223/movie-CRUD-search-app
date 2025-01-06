@@ -1,33 +1,25 @@
 from flask import jsonify
 from neo4j_database import get_neo4j_session
 
-from neo4j_database import get_neo4j_session
-
+# Dodawanie filmu
 def add_movie_service(title, genre, year, actors, director):
     session = get_neo4j_session()
-
     try:
-        # Przetwarzanie danych wejściowych
         title = title.strip()
         genre = genre.strip()
         year = str(year).strip()
         director = director.strip()
         actors = [actor.strip() for actor in actors]
 
-        print(f"Adding movie: {title}, Genre: {genre}, Year: {year}")
-        print(f"Actors: {actors}, Director: {director}")
-
-        # Sprawdzamy, czy film już istnieje
+        # Sprawdzenie czy film już istnieje
         if movie_exists(title, year, director):
-            print(f"Movie '{title}' already exists. Skipping creation.")
-            return  # Przerwij, jeśli film już istnieje
+            return  
 
-        # Rozpocznij transakcję
+        # Rozpoczęcie transakcji
         with session.begin_transaction() as tx:
 
             # Sprawdzenie, czy parametry są obecne
             if not genre or not year:
-                print(f"Brakuje wymaganych parametrów: Gatunek={genre}, Rok={year}")
                 return jsonify({"error": "Brak gatunku lub roku!"}), 400
 
             # Tworzenie węzła filmu z odpowiednimi parametrami
@@ -37,7 +29,7 @@ def add_movie_service(title, genre, year, actors, director):
             """
             tx.run(movie_query, {"title": title, "genre": genre, "year": year})
 
-            # Tworzenie reżysera i relacji
+            # Tworzenie reżysera i relacji DIRECTED_BY
             director_query = """
             MERGE (m:Movie {title: $title})
             ON CREATE SET m.genre = $genre, m.year = $year
@@ -45,7 +37,6 @@ def add_movie_service(title, genre, year, actors, director):
             MERGE (m)-[:DIRECTED_BY]->(d)
             """
             tx.run(director_query, {"director": director, "title": title, "genre": genre, "year": year})
-
 
             # Tworzenie gatunku i relacji IN_GENRE
             genre_query = """
@@ -76,9 +67,9 @@ def add_movie_service(title, genre, year, actors, director):
     finally:
         session.close()
 
+# Edycja filmu
 def edit_movie_service(movie_title, title, genre, year, actors, director):
     session = get_neo4j_session()
-
     try:
         # Walidacja danych
         if not title or not genre or not year or not actors:
@@ -91,7 +82,7 @@ def edit_movie_service(movie_title, title, genre, year, actors, director):
         print(f"Edytowanie filmu: {movie_title}")
         print(f"Nowy tytuł: {title}, Gatunek: {genre}, Rok: {year}, Aktorzy: {actors}, Reżyser: {director}")
 
-        # 1. Zaktualizowanie danych filmu (zmiana tytułu, gatunku, roku)
+        # Zaktualizowanie danych filmu (zmiana tytułu, gatunku, roku)
         query = """
         MATCH (m:Movie)
         WHERE toLower(m.title) = toLower($movie_title)
@@ -102,7 +93,7 @@ def edit_movie_service(movie_title, title, genre, year, actors, director):
         # Aktualizacja zmiennej movie_title na nowy tytuł
         movie_title = title
 
-        # 2. Pobranie aktualnych aktorów związanych z filmem
+        # Pobranie aktualnych aktorów związanych z filmem
         actor_query = """
         MATCH (a:Actor)-[:ACTED_IN]->(m:Movie)
         WHERE toLower(m.title) = toLower($movie_title)
@@ -111,21 +102,20 @@ def edit_movie_service(movie_title, title, genre, year, actors, director):
         result = session.run(actor_query, {"movie_title": movie_title})
         current_actors = [record["actor_name"] for record in result]
 
-        # Debugowanie
-        print(f"Aktorzy w bazie: {current_actors}")
-        print(f"Nowi aktorzy z formularza: {actors}")
+        #print(f"Aktorzy w bazie: {current_actors}")
+        #print(f"Nowi aktorzy z formularza: {actors}")
 
-        # Ustal, którzy aktorzy zostali usunięci i którzy muszą być dodani
+        # Podział aktorów na tych do usunięcia i do dodania
         current_actors_normalized = [actor.strip().lower() for actor in current_actors]
         actors_normalized = [actor.strip().lower() for actor in actors]
 
         actors_to_remove = [actor for actor in current_actors if actor.strip().lower() not in actors_normalized]
         actors_to_add = [actor for actor in actors if actor.strip().lower() not in current_actors_normalized]
 
-        print(f"Aktorzy do usunięcia: {actors_to_remove}")
-        print(f"Aktorzy do dodania: {actors_to_add}")
+        #print(f"Aktorzy do usunięcia: {actors_to_remove}")
+        #print(f"Aktorzy do dodania: {actors_to_add}")
 
-        # 2.1. Usuwanie powiązań z aktorami, którzy zostali usunięci
+        # Usuwanie powiązań z aktorami, którzy zostali usunięci
         if actors_to_remove:
             actor_remove_query = """
             MATCH (a:Actor)-[r:ACTED_IN]->(m:Movie)
@@ -134,7 +124,7 @@ def edit_movie_service(movie_title, title, genre, year, actors, director):
             """
             session.run(actor_remove_query, {"movie_title": movie_title, "actors_to_remove": actors_to_remove})
 
-        # 2.2. Dodanie nowych aktorów, którzy są w formularzu
+        # Dodanie nowych aktorów, którzy są w formularzu
         for actor_name in actors_to_add:
             actor_add_query = """
             MATCH (m:Movie)
@@ -144,7 +134,7 @@ def edit_movie_service(movie_title, title, genre, year, actors, director):
             """
             session.run(actor_add_query, {"movie_title": movie_title, "actor_name": actor_name})
 
-        # 3. Aktualizacja reżysera
+        # Aktualizacja reżysera
         if director:
             director_query = """
             MATCH (m:Movie)
@@ -176,7 +166,7 @@ def delete_movie_service(movie_title):
     """
     session.run(query, {"movie_title": movie_title})
     
-    # Teraz usunięcie samego filmu
+    # Usunięcie filmu
     query = """
     MATCH (m:Movie) WHERE m.title = $movie_title
     DELETE m
@@ -199,7 +189,6 @@ def get_movie_by_title(movie_title):
     session.close()
 
     if movie:
-        print(f"Found movie: {movie}")  # Dodajemy logowanie, aby zobaczyć, co zwróciło zapytanie
         return {
             "title": movie["title"],
             "genre": movie["genre"],
@@ -207,9 +196,58 @@ def get_movie_by_title(movie_title):
             "director": movie["director"],
             "actors": movie["actors"] if movie["actors"] is not None else []
         }
-    print("Movie not found!")  # Logujemy, jeśli film nie został znaleziony
     return None
 
+# Wyszukiwanie
+def search_movies(title=None, genre=None, actor=None, director=None):
+    query = """
+    MATCH (m:Movie)
+    OPTIONAL MATCH (m)<-[:ACTED_IN]-(a:Actor)
+    OPTIONAL MATCH (m)-[:DIRECTED_BY]->(d:Director)
+    OPTIONAL MATCH (m)-[:IN_GENRE]->(g:Genre)
+    WHERE
+        ($title IS NULL OR toLower(m.title) CONTAINS toLower($title)) AND
+        ($genre IS NULL OR toLower(g.name) CONTAINS toLower($genre)) AND
+        ($actor IS NULL OR toLower(a.name) CONTAINS toLower($actor)) AND
+        ($director IS NULL OR toLower(d.name) CONTAINS toLower($director))
+    RETURN 
+        m.title AS title, 
+        coalesce(g.name, 'Brak danych') AS genre, 
+        coalesce(m.year, 'Brak danych') AS year, 
+        coalesce(d.name, 'Brak danych') AS director, 
+        collect(DISTINCT a.name) AS actors
+    ORDER BY title
+    """
+
+    parameters = {
+        "title": title if title else None,
+        "genre": genre if genre else None,
+        "actor": actor if actor else None,
+        "director": director if director else None,
+    }
+
+    session = get_neo4j_session()
+    result = session.run(query, parameters)
+
+    # Debugging: Check the raw results from Neo4j
+    results = [record for record in result]
+
+    # Przetwarzanie wyników
+    movies = []
+    for record in results:
+        movies.append({
+            "title": record["title"],
+            "genre": record["genre"],
+            "year": record["year"],
+            "director": record["director"],
+            "actors": record["actors"] if record["actors"] else ["Brak danych"],
+        })
+
+    session.close()
+    return movies
+
+def filter_movies(movies):
+    return [movie for movie in movies if movie["genre"] != "Brak danych" and movie["director"] != "Brak danych"]
 
 def movie_exists(title, year=None, director=None):
     query = """
@@ -223,10 +261,7 @@ def movie_exists(title, year=None, director=None):
     parameters = {"title": title, "year": year, "director": director}
     result = session.run(query, parameters)
 
-    movie = result.single()  # Sprawdź pierwszy wynik
+    movie = result.single() 
     session.close()
 
     return movie is not None
-
-
-

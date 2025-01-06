@@ -1,22 +1,22 @@
-# Wybór obrazu Pythona
+# Python
 FROM python:3.9-slim
 
-# Ustalamy katalog roboczy
+# Katalog roboczy
 WORKDIR /app
 
-# Kopiujemy pliki projektu do kontenera
+# Kopia plików projektu do kontenera
 COPY ./backend /app/backend
 COPY ./frontend /app/frontend
 COPY ./backend/requirements.txt /app/requirements.txt
 
-# Instalujemy zależności
+# Zależności
 RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# Eksponujemy port, na którym będzie działać Flask
+# Port działania aplikacji Flask
 EXPOSE 5000
 
-# Ustawiamy zmienną środowiskową dla Flask
+# Zmienna środowiskowa dla Flask
 ENV FLASK_APP=backend/app.py
 
-# Uruchamiamy aplikację Flask
+# Uruchomienie aplikacji Flask
 CMD ["flask", "run", "--host=0.0.0.0"]

@@ -7,7 +7,6 @@ body {
     color: #333;
 }
 
-/* Container formularza (pełny formularz) */
 #searchFormContainer {
     background-color: #fff;
     padding: 30px;
@@ -21,12 +20,10 @@ body {
     margin: 50px auto;
 }
 
-/* Formularz (pełny formularz) */
 #searchForm {
     width: 100%;
 }
 
-/* Grupa formularza (pełny formularz) */
 #searchForm .form-group {
     display: flex;
     flex-direction: column;
@@ -34,14 +31,12 @@ body {
     width: 100%;
 }
 
-/* Etykiety formularza */
 #searchForm label {
     font-size: 16px;
     margin-bottom: 5px;
     font-weight: 500;
 }
 
-/* Pola formularza - tekstowe (rozciągnięte na prawie całą szerokość formularza) */
 #searchForm input {
     padding: 12px;
     font-size: 16px;
@@ -53,7 +48,6 @@ body {
     margin-bottom: 10px;
 }
 
-/* Przycisk formularza */
 #searchForm button {
     background-color: #28a745;
     color: white;
@@ -70,7 +64,7 @@ body {
     background-color: #218838;
 }
 
-/* Pasek wyszukiwania (po wyszukaniu) */
+/*Pasek wyszukiwania (po wyszukaniu) */
 .search-bar {
     background-color: #fff;
     padding: 20px;
@@ -86,7 +80,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Formularz w pasku wyszukiwania */
+/*Formularz w pasku wyszukiwania */
 .search-bar form {
     display: flex;
     flex-wrap: wrap;
@@ -136,7 +130,7 @@ body {
     display: none;
 }
 
-/* Tło informacji o wybranych filtrach */
+/*Tło informacji o wybranych filtrach */
 #filterInfo {
     margin-bottom: 20px;
     text-align: center;
@@ -158,7 +152,7 @@ body {
     font-weight: bold;
 }
 
-/* Przyciski w tabeli */
+/*Przyciski w tabeli */
 .action-buttons button {
     width: 100%;
     padding: 6px 12px;
@@ -172,16 +166,15 @@ body {
 
 .action-buttons {
     display: flex;
-    flex-direction: row; /* Układ pionowy */
-    gap: 10px; /* Odstępy między przyciskami */
-    justify-content: center; /* Wyrównanie do środka */
-    align-items: center; /* Wyrównanie do środka */
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center; 
+    align-items: center; 
 }
 
 
-/* Przycisk Edytuj (Niebieski) */
 .editButton {
-    background-color: #3498db; /* Niebieski */
+    background-color: #3498db;
     color: white;
 }
 
@@ -189,9 +182,8 @@ body {
     background-color: #2980b9;
 }
 
-/* Przycisk Szczegóły (Żółty) */
 .detailsButton {
-    background-color: #f39c12; /* Żółty */
+    background-color: #f39c12;
     color: white;
 }
 
@@ -199,9 +191,8 @@ body {
     background-color: #e67e22;
 }
 
-/* Przycisk Usuń (Czerwony) */
 .deleteButton {
-    background-color: #e74c3c; /* Czerwony */
+    background-color: #e74c3c; 
     color: white;
 }
 
@@ -241,7 +232,6 @@ tr:hover {
     background-color: #f9f9f9;
 }
 
-/* Komunikat o braku wyników */
 #results p {
     font-size: 18px;
     color: #ff0000;
@@ -255,7 +245,6 @@ tr:hover {
     box-sizing: border-box;
 }
 
-/* Powiadomienie wyników */
 #results-header {
     background-color: #f9f9f9;
     padding: 15px;
@@ -271,7 +260,6 @@ tr:hover {
     box-sizing: border-box;
 }
 
-/* Formularz */
 .form {
     background-color: #f0f0f5;
     padding: 30px;
@@ -281,7 +269,6 @@ tr:hover {
     max-width: 600px;
 }
 
-/* Etykiety */
 .form label {
     font-size: 1.2rem;
     margin-bottom: 10px;
@@ -290,7 +277,6 @@ tr:hover {
     color: #333;
 }
 
-/* Pola tekstowe */
 .form input[type="text"],
 .form input[type="number"],
 .form input[type="date"],
@@ -340,7 +326,6 @@ tr:hover {
     background-color: #2980b9;
 }
 
-/* Stylizacja linków w tabeli */
 #resultsTable a {
     color: #0000FF;
     text-decoration: none;
@@ -355,7 +340,6 @@ tr:hover {
     border-radius: 4px;
 }
 
-/* Styl dla formularza */
 #addMovieForm, 
 #editMovieForm,
 #detailsMovieForm {
@@ -374,20 +358,18 @@ tr:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Pełna wysokość widoku */
+    height: 100vh;
     background-color: #f9f9f9;
 }
 
-/* Styl dla kontenera tła */
 .alert-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Pełna wysokość widoku */
+    height: 100vh;
     background-color: #f9f9f9;
 }
 
-/* Prostokąt z zaokrąglonymi rogami */
 .alert-box {
     background-color: #fff;
     padding: 40px;
@@ -398,7 +380,6 @@ tr:hover {
     text-align: center;
 }
 
-/* Tytuł */
 .alert-box h1 {
     font-size: 32px;
     font-weight: bold;
@@ -406,14 +387,12 @@ tr:hover {
     margin-bottom: 20px;
 }
 
-/* Informacja o filmie */
 .movie-info {
     font-size: 18px;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* Pytanie */
 .question {
     font-size: 18px;
     font-weight: 600;
@@ -421,7 +400,6 @@ tr:hover {
     margin-bottom: 30px;
 }
 
-/* Grupa przycisków */
 .button-group {
     display: flex;
     flex-direction: column;
@@ -429,7 +407,6 @@ tr:hover {
     margin-top: 20px;
 }
 
-/* Styl dla przycisków - wspólny dla obu */
 .button-group button {
     width: 100%;
     padding: 12px 24px;
@@ -440,7 +417,6 @@ tr:hover {
     transition: background-color 0.3s ease;
 }
 
-/* Przycisk "Dodaj nowy film" */
 .add-new-button {
     background-color: #3498db;
     color: white;
@@ -450,7 +426,6 @@ tr:hover {
     background-color: #2980b9;
 }
 
-/* Przycisk "Anuluj" */
 .cancel-button {
     background-color: #28a745;
     color: white;
@@ -460,8 +435,6 @@ tr:hover {
     background-color: #218838;
 }
 
-
-/* Styl dla tytułu formularza */
 .container h1 {
     font-size: 32px;
     font-weight: bold;
@@ -471,7 +444,6 @@ tr:hover {
     padding-left: 15px;
 }
 
-/* Styl dla etykiet */
 #addMovieForm label,
 #editMovieForm label,
 #detailsMovieForm label {
@@ -482,7 +454,6 @@ tr:hover {
     color: #333;
 }
 
-/* Styl dla pól tekstowych */
 #addMovieForm input[type="text"],
 #addMovieForm input[type="number"],
 #detailsMovieForm input[type="text"],
@@ -498,7 +469,6 @@ tr:hover {
     box-sizing: border-box;
 }
 
-/* Styl dla przycisku submit */
 #btn-submit {
     width: 100%;
     padding: 10px;
@@ -511,7 +481,6 @@ tr:hover {
     box-sizing: border-box;
 }
 
-/* Styl dla przycisku submit w momencie najechania */
 #addMovieForm input[type="submit"]:hover {
     background-color: #60bb64;
 }
@@ -520,23 +489,22 @@ tr:hover {
     background-color: #60bb64;
 }
 
-/* Styl dla zablokowanych pól */
 #detailsMovieForm  input:disabled {
     background-color: #f0f0f0;
     color: #999;
     cursor: not-allowed;
     border: 1px solid #ddd;
 }
-/* Styl przycisków w formularzu szczegółów */
+
 #detailsMovieForm .action-buttons {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    gap: 15px; /* Równe odstępy między przyciskami */
+    gap: 15px;
 }
 
 #detailsMovieForm button {
-    width: 100%; /* Przyciski na całą szerokość pól tekstowych */
+    width: 100%;
     padding: 10px 15px;
     font-size: 16px;
     font-weight: bold;
@@ -546,7 +514,6 @@ tr:hover {
     transition: background-color 0.3s ease;
 }
 
-/* Edytuj (niebieski) */
 #detailsMovieForm #editButton {
     background-color: #3498db;
     color: white;
@@ -556,7 +523,6 @@ tr:hover {
     background-color: #2980b9;
 }
 
-/* Usuń (czerwony) */
 #detailsMovieForm #deleteButton {
     background-color: #ff0000;
     color: white;
@@ -566,8 +532,6 @@ tr:hover {
     background-color: #c0392b;
 }
 
-
-/* Styl dla przycisku powrotu */
 .back-button {
     display: inline-block;
     padding: 10px 20px;
@@ -584,7 +548,6 @@ tr:hover {
     background-color: #2980b9;
 }
 
-/* Responsywność formularza */
 @media (max-width: 768px) {
     #searchFormContainer .form-group,
     #searchFormContainerTop .form-group {
@@ -607,9 +570,9 @@ tr:hover {
 
     .action-buttons {
         display: flex;
-        flex-direction: column; /* Układ pionowy */
-        gap: 10px; /* Odstępy między przyciskami */
-        justify-content: center; /* Wyrównanie do środka */
-        align-items: center; /* Wyrównanie do środka */
+        flex-direction: column;
+        gap: 10px; 
+        justify-content: center; 
+        align-items: center; 
     }
 }

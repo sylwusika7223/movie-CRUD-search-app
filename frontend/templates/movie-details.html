@@ -12,7 +12,6 @@
         <h1>Szczegóły Filmu</h1>
     </div>
 
-    <!-- Kontener formularza -->
     <div class="form-container">
         <form id="detailsMovieForm">
             <label for="title">Tytuł:</label>
@@ -30,7 +29,6 @@
             <label for="director">Reżyser:</label>
             <input type="text" id="director" name="director" value="{{ movie.director }}" disabled>
 
-            <!-- Przyciski akcji -->
             <div class="action-buttons">
                 <button id="editButton" type="button" onclick="window.location.href='{{ url_for('edit_movie', movie_title=movie.title) }}';">Edytuj</button>
                 <button id="deleteButton" type="button" class="deleteButton" onclick="confirmDelete()">Usuń</button>
