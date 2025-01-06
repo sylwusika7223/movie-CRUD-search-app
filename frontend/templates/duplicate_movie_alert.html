@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Duplikat filmu</h1>
-        <p>Film o tytule "<strong>{{ title }}</strong>" już istnieje!</p>
-        <p>Czy chcesz dodać coś innego?</p>
-
-        <div class="button-group">
-            <button onclick="window.location.href='/add';">Dodaj inny film</button>
-            <button onclick="window.location.href='/';">Anuluj i wróć do strony głównej</button>
+    <div class="alert-container">
+        <div class="alert-box">
+            <h1>Duplikat filmu</h1>
+            <p class="movie-info">Film o tytule "<strong>{{ title }}</strong>" już istnieje!</p>
+            <p class="question">Czy chcesz dodać coś innego?</p>
+            <div class="button-group">
+                <button class="add-new-button" onclick="window.location.href='/add';">Dodaj inny film</button>
+                <button class="cancel-button" onclick="window.location.href='/';">Wróć do strony głównej</button>
+            </div>
         </div>
     </div>
 </body>

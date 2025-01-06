@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: neo4j_container
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password  # Zmiana hasła na 'password'
+      - NEO4J_dbms_default__database=movies 
+    volumes:
+      - ./docker/init.cypher:/docker-entrypoint-initdb.d/init.cypher 
+      - neo4j_data:/data
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile # Ścieżka do Dockerfile
+    container_name: backend_container
+    ports:
+      - "5000:5000"
+    depends_on:
+      - neo4j
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687  # Używa hosta zdefiniowanego w docker-compose
+      - FLASK_APP=backend/app.py
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_PASSWORD=password
+      
+volumes:
+  neo4j_data:

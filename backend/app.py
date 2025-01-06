@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from movie_service import add_movie_service, edit_movie_service, delete_movie_service, get_movie_by_title, movie_exists
-from neo4j_database import get_neo4j_session
+from neo4j_database import  get_neo4j_session
 
 # Konfiguracja ścieżek do szablonów i plików statycznych
 app = Flask(__name__,
@@ -112,8 +112,9 @@ def add_movie():
             return jsonify({"error": "Wszystkie pola muszą być wypełnione!"}), 400
 
         # Sprawdzamy, czy film już istnieje
-        if movie_exists(title, director):
-            return render_template("duplicate_movie_alert.html", title=title, director=director)
+        if get_movie_by_title(title) is not None:
+            print(f"Rendering duplicate_movie_alert.html for movie: {title}")
+            return render_template("duplicate_movie_alert.html", title=title)
 
         # Dodanie filmu do bazy danych
         add_movie_service(title, genre, year, actors, director)
@@ -180,7 +181,6 @@ def get_movie_data(movie_title):
         'actors': movie['actors'],
         'director': movie['director']
     })
-
 
 if __name__ == '__main__':
     app.run(debug=True)

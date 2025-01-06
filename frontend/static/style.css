@@ -114,7 +114,24 @@ body {
     background-color: #218838;
 }
 
-/* Ukrywanie formularza wyszukiwania po wyszukaniu */
+
+#resetFilters {
+    background-color: #d0d5d8; 
+    color: #333;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+
+#resetFilters:hover {
+    background-color: #bac2c3;
+}
+
+
 #searchFormContainer.hidden {
     display: none;
 }
@@ -143,7 +160,8 @@ body {
 
 /* Przyciski w tabeli */
 .action-buttons button {
-    padding: 8px 16px;
+    width: 100%;
+    padding: 6px 12px;
     border: none;
     border-radius: 8px;
     font-size: 14px;
@@ -151,6 +169,15 @@ body {
     margin-right: 10px;
     transition: background-color 0.3s ease;
 }
+
+.action-buttons {
+    display: flex;
+    flex-direction: row; /* Układ pionowy */
+    gap: 10px; /* Odstępy między przyciskami */
+    justify-content: center; /* Wyrównanie do środka */
+    align-items: center; /* Wyrównanie do środka */
+}
+
 
 /* Przycisk Edytuj (Niebieski) */
 .editButton {
@@ -190,6 +217,7 @@ table {
     margin-left: 30px;
     margin-right: 30px;
     border-radius: 8px;
+    border-collapse: collapse;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -206,6 +234,7 @@ th, td {
 
 th {
     background-color: #f2f2f2;
+    text-align: center;
 }
 
 tr:hover {
@@ -340,6 +369,97 @@ tr:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
 }
+
+.alert-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Pełna wysokość widoku */
+    background-color: #f9f9f9;
+}
+
+/* Styl dla kontenera tła */
+.alert-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Pełna wysokość widoku */
+    background-color: #f9f9f9;
+}
+
+/* Prostokąt z zaokrąglonymi rogami */
+.alert-box {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+/* Tytuł */
+.alert-box h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Informacja o filmie */
+.movie-info {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Pytanie */
+.question {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Grupa przycisków */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Styl dla przycisków - wspólny dla obu */
+.button-group button {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Przycisk "Dodaj nowy film" */
+.add-new-button {
+    background-color: #3498db;
+    color: white;
+}
+
+.add-new-button:hover {
+    background-color: #2980b9;
+}
+
+/* Przycisk "Anuluj" */
+.cancel-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #218838;
+}
+
 
 /* Styl dla tytułu formularza */
 .container h1 {
@@ -483,5 +603,13 @@ tr:hover {
     #searchFormContainerTop button {
         flex: 1;
         margin-bottom: 10px;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-direction: column; /* Układ pionowy */
+        gap: 10px; /* Odstępy między przyciskami */
+        justify-content: center; /* Wyrównanie do środka */
+        align-items: center; /* Wyrównanie do środka */
     }
 }

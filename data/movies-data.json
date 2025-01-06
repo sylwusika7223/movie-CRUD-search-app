@@ -1,0 +1,25 @@
+{
+    "movies": [
+        {
+            "title": "The Matrix",
+            "genre": "Action",
+            "year": 1999,
+            "actors": ["Keanu Reeves", "Laurence Fishburne", "Carrie-Anne Moss"],
+            "director": "Wachowski Brothers"
+        },
+        {
+            "title": "The Godfather",
+            "genre": "Crime",
+            "year": 1972,
+            "actors": ["Marlon Brando", "Al Pacino", "James Caan"],
+            "director": "Francis Ford Coppola"
+        },
+        {
+            "title": "Die Hard",
+            "genre": "Action",
+            "year": 1988,
+            "actors": ["Bruce Willis", "Alan Rickman", "Bonnie Bedelia"],
+            "director": "John McTiernan"
+        }
+    ]
+}

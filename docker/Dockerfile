@@ -5,13 +5,18 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Kopiujemy pliki projektu do kontenera
-COPY . .
+COPY ./backend /app/backend
+COPY ./frontend /app/frontend
+COPY ./backend/requirements.txt /app/requirements.txt
 
 # Instalujemy zależności
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r /app/backend/requirements.txt
 
-# Expose port 5000
+# Eksponujemy port, na którym będzie działać Flask
 EXPOSE 5000
 
-# Uruchamiamy aplikację
-CMD ["python", "backend/app.py"]
+# Ustawiamy zmienną środowiskową dla Flask
+ENV FLASK_APP=backend/app.py
+
+# Uruchamiamy aplikację Flask
+CMD ["flask", "run", "--host=0.0.0.0"]
