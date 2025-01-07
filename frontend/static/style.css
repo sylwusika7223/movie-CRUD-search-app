@@ -245,7 +245,8 @@ tr:hover {
     box-sizing: border-box;
 }
 
-#results-header {
+#results-header,
+#recommendations {
     background-color: #f9f9f9;
     padding: 15px;
     margin-bottom: 20px;
@@ -258,6 +259,11 @@ tr:hover {
     margin-right: 30px;
     width: calc(100% - 60px);
     box-sizing: border-box;
+}
+
+#recommendations {
+    background-color: #b7eea8;
+    border: #94df9b 1px;
 }
 
 .form {

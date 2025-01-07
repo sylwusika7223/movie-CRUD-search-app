@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie_service import add_movie_service, edit_movie_service, delete_movie_service, filter_movies, get_movie_by_title, movie_exists, search_movies
+from movie_service import add_movie_service, edit_movie_service, delete_movie_service, filter_movies, get_movie_by_title, get_recommendations, movie_exists, search_movies
 from neo4j_database import  get_neo4j_session
 
 # Konfiguracja ścieżek do szablonów i plików statycznych
@@ -72,9 +72,11 @@ def add_movie():
 def movie_details(movie_title):
     movie = get_movie_by_title(movie_title)
     if movie:
-        return render_template("movie-details.html", movie=movie)
+        recommendations = get_recommendations(movie)
+        return render_template("movie-details.html", movie=movie, recommendations=recommendations)        
     else:
         return "Film nie znaleziony", 404
+    
 
 # Edycja filmu
 @app.route("/edit/<string:movie_title>", methods=["GET", "POST"])

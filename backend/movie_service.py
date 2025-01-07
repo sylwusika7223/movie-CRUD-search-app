@@ -249,6 +249,75 @@ def search_movies(title=None, genre=None, actor=None, director=None):
 def filter_movies(movies):
     return [movie for movie in movies if movie["genre"] != "Brak danych" and movie["director"] != "Brak danych"]
 
+def get_recommendations(movie):
+    query = """
+    MATCH (m:Movie)-[:IN_GENRE]->(g:Genre)
+    WHERE toLower(m.title) = toLower($movie_title)
+    WITH g
+    MATCH (m2:Movie)-[:IN_GENRE]->(g)
+    WHERE toLower(m2.title) <> toLower($movie_title)
+    MATCH (m2)-[:DIRECTED_BY]->(d:Director)
+    OPTIONAL MATCH (m2)-[:ACTED_IN]-(a:Actor)
+    RETURN DISTINCT m2.title AS title, 
+                    coalesce(g.name, 'Brak danych') AS genre, 
+                    coalesce(d.name, 'Brak danych') AS director, 
+                    collect(DISTINCT a.name) AS actors
+    UNION ALL
+
+    MATCH (m:Movie)-[:DIRECTED_BY]->(d:Director)
+    WHERE toLower(m.title) = toLower($movie_title)
+    WITH d
+    MATCH (m2:Movie)-[:DIRECTED_BY]->(d)
+    WHERE toLower(m2.title) <> toLower($movie_title)
+    MATCH (m2)-[:IN_GENRE]->(g:Genre)
+    OPTIONAL MATCH (m2)-[:ACTED_IN]-(a:Actor)
+    RETURN DISTINCT m2.title AS title, 
+                    coalesce(g.name, 'Brak danych') AS genre, 
+                    coalesce(d.name, 'Brak danych') AS director, 
+                    collect(DISTINCT a.name) AS actors
+    UNION ALL
+
+    MATCH (m:Movie)-[:ACTED_IN]-(a:Actor)
+    WHERE toLower(m.title) = toLower($movie_title)
+    WITH COLLECT(a.name) AS actors
+    MATCH (m2:Movie)-[:ACTED_IN]-(a2:Actor)
+    WHERE toLower(m2.title) <> toLower($movie_title) AND a2.name IN actors
+    WITH m2, actors, COLLECT(DISTINCT a2.name) AS actorsList
+    MATCH (m2)-[:IN_GENRE]->(g:Genre)
+    OPTIONAL MATCH (m2)-[:DIRECTED_BY]->(d:Director)
+    RETURN DISTINCT m2.title AS title, 
+                    coalesce(g.name, 'Brak danych') AS genre, 
+                    coalesce(d.name, 'Brak danych') AS director, 
+                    actorsList AS actors
+    """
+    
+    parameters = {
+        "movie_title": movie["title"]
+    }
+
+    session = get_neo4j_session()
+    result = session.run(query, parameters)
+
+    recommendations = []
+    seen_titles = set()  # Zestaw, aby przechowywać już przetworzone tytuły
+
+    for record in result:
+        # Sprawdzamy, czy tytuł już został dodany
+        title = record["title"]
+        if title not in seen_titles:
+            seen_titles.add(title)
+            recommendations.append({
+                "title": title,
+                "genre": record["genre"],
+                "director": record["director"],
+                "actors": record["actors"] if record["actors"] else ["Brak danych"]
+            })
+
+    session.close()
+    print('\n\nRekomendacje: ', recommendations)
+    return recommendations
+
+
 def movie_exists(title, year=None, director=None):
     query = """
     MATCH (m:Movie)
