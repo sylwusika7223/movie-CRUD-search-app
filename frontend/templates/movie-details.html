@@ -31,7 +31,7 @@
     
             <div class="action-buttons">
                 <button id="editButton" type="button" onclick="window.location.href='{{ url_for('edit_movie', movie_title=movie.title) }}';">Edytuj</button>
-                <button id="deleteButton" type="button" class="deleteButton" onclick="confirmDelete()">Usuń</button>
+                <button id="deleteButton" type="button" class="deleteButton" data-movie-title="{{movie.title}}">Usuń</button>
             </div>
         </form>
     </div>
@@ -69,13 +69,4 @@
         <p id="no-recommendations">Brak rekomendacji.</p>
     {% endif %}
     
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script>
-        // Funkcja potwierdzenia usunięcia
-        function confirmDelete() {
-            if (confirm("Czy na pewno chcesz usunąć ten film?")) {
-                window.location.href = "/delete/{{ movie.title }}";
-            }
-        }
-    </script>
-    
+    <script src="{{ url_for('static', filename='movie-details.js') }}"></script>

@@ -93,9 +93,13 @@ def edit_movie(movie_title):
             print(f"Rendering duplicate_movie_alert.html for movie: {title}")
             return render_template("duplicate_movie_alert.html", title=title)
         
-        edit_movie_service(movie_title, title, genre, year, actors, director)
+        result = edit_movie_service(movie_title, title, genre, year, actors, director)
         
-        return redirect(f"/movie/{title}")
+        if result.get('success'):
+            new_title = result.get('new_title', title)
+            return redirect(f"/movie/{new_title}")
+        else:
+            return "Wystąpił błąd podczas edycji filmu", 500
     
     return render_template("edit-movie.html", movie=movie)
 
