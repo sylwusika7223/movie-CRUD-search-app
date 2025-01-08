@@ -71,16 +71,12 @@ def add_movie_service(title, genre, year, actors, director):
 def edit_movie_service(movie_title, title, genre, year, actors, director):
     session = get_neo4j_session()
     try:
-        # Walidacja danych
         if not title or not genre or not year or not actors:
             return {'error': 'Wszystkie pola są wymagane'}, 400
 
         # Normalizacja danych wejściowych
         actors = [actor.strip().title() for actor in actors]
         director = director.strip().title()
-
-        print(f"Edytowanie filmu: {movie_title}")
-        print(f"Nowy tytuł: {title}, Gatunek: {genre}, Rok: {year}, Aktorzy: {actors}, Reżyser: {director}")
 
         # Zaktualizowanie danych filmu (zmiana tytułu, gatunku, roku)
         query = """
@@ -175,6 +171,8 @@ def delete_movie_service(movie_title):
     session.close()
     
     return {'success': True, 'message': f"Film '{movie_title}' został usunięty."}
+
+
 
 def get_movie_by_title(movie_title):
     session = get_neo4j_session()

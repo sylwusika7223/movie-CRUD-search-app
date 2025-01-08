@@ -213,7 +213,7 @@ table {
     box-sizing: border-box;
 }
 
-table, th, td {
+table, th, td, #no-recommendations {
     border: 1px solid #ddd;
 }
 
@@ -221,6 +221,14 @@ th, td {
     padding: 15px;
     text-align: left;
     font-size: 16px;
+}
+
+#no-recommendations{
+    padding: 15px;
+    font-size: 16px;
+    display: block;
+    text-align: center;
+    margin: 20px auto;
 }
 
 th {
@@ -265,6 +273,7 @@ tr:hover {
     background-color: #b7eea8;
     border: #94df9b 1px;
 }
+
 
 .form {
     background-color: #f0f0f5;

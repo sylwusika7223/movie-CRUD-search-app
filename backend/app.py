@@ -1,7 +1,6 @@
 import os
-from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie_service import add_movie_service, edit_movie_service, delete_movie_service, filter_movies, get_movie_by_title, get_recommendations, movie_exists, search_movies
-from neo4j_database import  get_neo4j_session
+from flask import Flask, render_template, request, jsonify, redirect
+from movie_service import add_movie_service, edit_movie_service, delete_movie_service, filter_movies, get_movie_by_title, get_recommendations,  search_movies
 
 # Konfiguracja ścieżek do szablonów i plików statycznych
 app = Flask(__name__,
@@ -63,7 +62,7 @@ def add_movie():
 
         add_movie_service(title, genre, year, actors, director)
 
-        return redirect("/")
+        return redirect(f"/movie/{title}")
 
     return render_template("add-form.html")
 
@@ -90,10 +89,13 @@ def edit_movie(movie_title):
         actors = [actor.strip() for actor in request.form["actors"].split(",")]  # Rozdzielanie aktorów po przecinku
         director = request.form["director"]
         
+        if movie_title!=title and get_movie_by_title(title) is not None:
+            print(f"Rendering duplicate_movie_alert.html for movie: {title}")
+            return render_template("duplicate_movie_alert.html", title=title)
+        
         edit_movie_service(movie_title, title, genre, year, actors, director)
         
-        updated_movie = get_movie_by_title(title) 
-        return render_template("movie-details.html", movie=updated_movie)
+        return redirect(f"/movie/{title}")
     
     return render_template("edit-movie.html", movie=movie)
 
@@ -103,20 +105,7 @@ def delete_movie(movie_title):
     delete_movie_service(movie_title)
     return jsonify({"message": "Film został usunięty pomyślnie!"}), 200
 
-@app.route('/get_movie_data/<movie_title>', methods=['GET'])
-def get_movie_data(movie_title):
-    movie = get_movie_by_title(movie_title)
-    
-    if movie is None:
-        return jsonify({"error": "Film not found"}), 404
-    
-    return jsonify({
-        'title': movie['title'],
-        'genre': movie['genre'],
-        'year': movie['year'],
-        'actors': movie['actors'],
-        'director': movie['director']
-    })
+
 
 if __name__ == '__main__':
     app.run(debug=True)

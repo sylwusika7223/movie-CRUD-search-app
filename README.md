@@ -8,6 +8,7 @@ To prosta aplikacja webowa umożliwająca użytkownikom wyszukiwanie filmów po 
 - Edycja istniejących filmów.
 - Usuwanie filmów.
 
+
 ## Requirements
 - Python 3.x
 - Neo4j (Docker setup available)
@@ -16,12 +17,14 @@ To prosta aplikacja webowa umożliwająca użytkownikom wyszukiwanie filmów po 
 - Docker installed on your machine.
 - Docker Compose installed.
 
+
 ## Setup
 
 ### 1. Sklonowanie repozytorium
 Najpierw sklonuj repozytorium na swoją maszynę i przejdź do katalogu projektu:
 
 git clone https://github.com/sylwusika7223/movie-CRUD-search-app
+
 
 ### 2. Uruchomienie Neo4j za pomocą Dockera
 Przejdź do folderu `docker` i uruchom kontener Neo4j:
@@ -30,6 +33,7 @@ cd docker
 docker-compose up -d
 
 Neo4j zostanie uruchomiony na porcie `7474`, a jego endpoint Bolt na porcie `7687`.
+
 
 ### 3. Sprawdzenie bazy Neo4j
 Otwórz swoją przeglądarkę i przejdź pod adres:
@@ -53,6 +57,7 @@ Domyślna strona wyświetla wszystkie dostępne filmy oraz umożliwia filtrowani
 - **Zobaczyć szczegóły istniejącego filmu.**
 - **Edytować istniejący film.**
 - **Usunąć istniejący film.**
+
 
 ### 7. Zatrzymanie kontenerów Docker
 Aby zatrzymać kontenery Docker, użyj następującego polecenia w folderze `docker`:
